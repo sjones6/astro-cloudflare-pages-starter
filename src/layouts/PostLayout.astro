@@ -1,0 +1,70 @@
+---
+import HTML from '$/components/HTML.astro';
+import Head, { Props as HeadProps } from '$/components/Head.astro';
+import type { CollectionEntry } from 'astro:content';
+import { SITE } from '$/config';
+import BaseLayout from '$/components/BaseLayout.astro';
+
+interface Props {
+  content: CollectionEntry<'blog'>['data'];
+  head: HeadProps;
+}
+const { content, head } = Astro.props;
+
+const AUTHOR_NAME = content.author
+  ? content.author
+  : SITE?.author
+  ? SITE?.author
+  : 'Author';
+const AUTHOR_TWITTER = content.authorTwitter
+  ? content.authorTwitter
+  : SITE?.authorTwitter
+  ? SITE?.authorTwitter
+  : '';
+---
+
+<HTML>
+  <Head {...head} />
+  <BaseLayout>
+    <section class="max-w-2xl mx-auto">
+      <div class="py-4 mb-1 text-center md:text-left">
+        <h1 class="text-5xl font-extrabold text-theme-primary mb-8">
+          {content.title}
+        </h1>
+        <h5
+          class="text-gray-500 flex justify-center text-left md:flex-none md:justify-start"
+        >
+          <div class={'flex flex-col pl-2'}>
+            {
+              AUTHOR_TWITTER ? (
+                <a
+                  class="no-underline hover:text-theme-primary"
+                  href={`https://twitter.com/${AUTHOR_TWITTER}`}
+                  title={`${AUTHOR_NAME}'s twitter`}
+                  target="_blank"
+                  rel="external"
+                >
+                  {AUTHOR_NAME}
+                </a>
+              ) : (
+                <span class="no-underline hover:text-theme-primary">
+                  {AUTHOR_NAME}
+                </span>
+              )
+            }
+            <span class="text-gray-400"
+              >{
+                new Intl.DateTimeFormat('en-US', { dateStyle: 'full' }).format(
+                  new Date(content.date)
+                )
+              }
+            </span>
+          </div>
+        </h5>
+      </div>
+      <div class="prose">
+        <slot />
+      </div>
+    </section>
+  </BaseLayout>
+</HTML>

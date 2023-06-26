@@ -1,0 +1,17 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import PostPreview from './PostPreview.astro';
+
+interface Props {
+  posts: CollectionEntry<'blog'>[];
+}
+
+const { posts } = Astro.props;
+const sortedPosts = posts.sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+---
+
+<section class="flex flex-col gap-12 max-w-2xl mx-auto mt-6">
+  {sortedPosts.map((post) => <PostPreview post={post} />)}
+</section>

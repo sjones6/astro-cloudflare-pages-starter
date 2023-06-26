@@ -1,0 +1,36 @@
+---
+import { SITE } from '$/config';
+export interface Props {
+  title: string;
+  seo?: boolean;
+}
+
+const { title, seo = true } = Astro.props;
+---
+
+<head>
+  <meta charset="utf-8" />
+  <meta
+    name="description"
+    content={SITE.description}
+  />
+  <meta name="viewport" content="width=device-width" />
+  <meta name="generator" content={Astro.generator} />
+  <title>{title || SITE.title}</title>
+  <link rel="sitemap" href="/sitemap-index.xml" />
+  <link rel="icon" type="image/x-icon" href="/favicon.svg" />
+
+  {
+    seo ? (
+      <meta name="robots" content="index follow" />
+    ) : (
+      <meta name="robots" content="noindex nofollow" />
+    )
+  }
+</head>
+<style is:global>
+  html {
+    font-family: system-ui, sans-serif;
+    background-color: #f6f6f6;
+  }
+</style>
